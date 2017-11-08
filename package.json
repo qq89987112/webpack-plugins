@@ -1,0 +1,19 @@
+{
+  "name": "path-corrector",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qq89987112/webpack-plugins.git"
+  },
+  "author": "蔡荣庚",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/qq89987112/webpack-plugins/issues"
+  },
+  "homepage": "https://github.com/qq89987112/webpack-plugins#readme"
+}
