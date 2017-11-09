@@ -1,18 +1,19 @@
 function MyPlugin(options) {
+  this.time = new Date().getTime();
 }
 
 
 MyPlugin.prototype.apply = function (compiler) {
 
-  compiler.plugin('compilation', function(compilation) {
+  compiler.plugin('compilation', (compilation) =>{
 
-    compilation.plugin('html-webpack-plugin-after-html-processing', function(htmlPluginData, callback) {
-      htmlPluginData.html = htmlPluginData.html.replace(/\/static\//g, "static/");
+    compilation.plugin('html-webpack-plugin-after-html-processing', (htmlPluginData, callback) =>{
+      htmlPluginData.html = htmlPluginData.html.replace(/\/?(static\/\S+\.(?:css|js))/g, `$1?v=${this.time}`);
       callback(null, htmlPluginData);
     });
   });
 
-  compiler.plugin("emit", function (compilation, callback) {
+  compiler.plugin("emit",  (compilation, callback) =>{
 
 
     let ret = compilation.chunks.reduce((prev, cur) => {
@@ -33,10 +34,10 @@ MyPlugin.prototype.apply = function (compiler) {
 
 
 
-    ret.css.forEach(function (filename) {
+    ret.css.forEach( (filename) =>{
       // source()可以得到每个文件的源码
       let source = compilation.assets[filename].source(),
-        css = source.replace(/\/static/g, "..");
+        css = source.replace(/\/?static(\/\S+)\)/g, `..$1?v=${this.time})`);
 
       compilation.assets[filename] = {
         source: function () {
