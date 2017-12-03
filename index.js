@@ -24,6 +24,8 @@ MyPlugin.prototype.apply = function (compiler) {
       cur.files.forEach((item) => {
         if (/.css($|\?)/.test(item)) {
           css.push(item);
+        }else{
+        //  剔除console.log() 的代码
         }
       });
 
