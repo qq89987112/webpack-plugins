@@ -8,7 +8,9 @@ MyPlugin.prototype.apply = function (compiler) {
     compiler.plugin('compilation', (compilation) => {
 
         compilation.plugin('html-webpack-plugin-after-html-processing', (htmlPluginData, callback) => {
-            htmlPluginData.html = htmlPluginData.html.replace(/\/?(static\/\S+\.(?:css|js))/g, `$1?v=${this.time}`);
+            htmlPluginData.html = htmlPluginData.html.replace(/=\.?\/?(static\/\S+\.(?:css|js))/g, (m,e)=>{
+                return m.replace(e,`${e}?v=${this.time}`)
+            });
             callback(null, htmlPluginData);
         });
     });
@@ -41,7 +43,9 @@ MyPlugin.prototype.apply = function (compiler) {
         ret.css.forEach((filename) => {
             // source()可以得到每个文件的源码
             let source = compilation.assets[filename].source(),
-                css = source.replace(/\/?static(\/\S+)\)/g, `..$1?v=${this.time})`);
+                css = source.replace(/\(\/?(static\/[^\)]+)/g, (m,e)=>{
+                    return m.replace(e,`${e.replace('static','..')}?v=${this.time}`)
+                });
 
             compilation.assets[filename] = {
                 source: function () {
@@ -54,23 +58,8 @@ MyPlugin.prototype.apply = function (compiler) {
         });
 
 
-        let i = 0;
         ret.js.forEach((filename) => {
-            // source()可以得到每个文件的源码
-            let source = compilation.assets[filename].source(),
-                js = source.replace(/\/?static(\/\S+)\)/g, `..$1?v=${this.time})`);
-            if(i===0){
-                console.log(js);
-            }
-            i++;
-            compilation.assets[filename] = {
-                source: function () {
-                    return js;
-                },
-                size: function () {
-                    return js.length;
-                }
-            }
+
         });
 
         callback();
