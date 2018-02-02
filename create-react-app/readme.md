@@ -28,4 +28,4 @@ Syntax error: D:/crg/github/react-simple-component/src/index.js: Unexpected toke
 
 最终
     1、cnpm i --save babel-polyfill
-    2、import "babel-polyfill"
+    2、import "babel-polyfill" (最顶部)
